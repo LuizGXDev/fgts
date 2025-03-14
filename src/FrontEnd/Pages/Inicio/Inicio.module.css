@@ -1,0 +1,344 @@
+/* Importando a fonte "Roboto" do Google Fonts */ 
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    font-size: 14.83px;
+    line-height: 1.2em;
+    font-family: 'Roboto', sans-serif;
+}
+
+.containerIndex {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+}
+
+.header {
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(90deg, rgba(80, 185, 170, 0.9) 0.88%, #E8EDEA 48.27%, rgba(3, 107, 182, 0.9) 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.logo {
+    width: 93px;
+    height: 43px;
+}
+
+.containerMain {
+    width: 100vw;
+    height: calc(100vh - 50px); 
+    background: linear-gradient(90deg, #3899EC 0%, #50B9AA 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    overflow: hidden; 
+    position: relative;
+}
+
+.form {
+    width: 100%;
+    max-width: 600px;
+    background-color: #fff;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 3;
+}
+
+input::placeholder {
+    font-weight: 900;
+}
+
+/* Estilo dos inputs */
+.input {
+    width: 100%;
+    height: 40px;
+    padding: 0 15px;
+    font-size: 14pt;
+    border: none;
+    border-bottom: 3px solid #e65c00; /* Definir largura e cor da borda inferior */
+    margin-bottom: 15px;
+    transition: border-color 0.3s ease-in-out;
+}
+
+.input:focus {
+    border-color: #ff6f00; /* Borda laranja no foco */
+    outline: none;
+}
+
+/* Container de inputs com flexbox para distribuir os campos */
+/* Container dos inputs */
+.inputsContainer {
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: space-between; /* Distribui os inputs na linha */
+    width: 100%;
+    margin-top: 20px;
+    gap: 10px;  /* Espaçamento entre os campos */
+}
+
+/* Grupos de inputs */
+.inputGroup {
+    width: 48%; /* Cada input ocupará 48% da largura */
+    margin-bottom: 10px;
+}
+
+/* Ajuste para o campo "Agência" */
+.inputGroupAgencia {
+    width: 48%;  /* 48% de largura para Agência */
+}
+
+/* Ajuste para o campo "Conta" */
+.inputGroupConta {
+    width: 48%;  /* 48% de largura para Conta */
+}
+
+/* Ajuste para o campo CPF, que deve ocupar 100% da largura */
+.inputGroupCPF {
+    width: 100%; /* Deixa o campo CPF ocupar toda a largura */
+}
+/* Ajustes para o botão */
+.buttonContainerShowImage {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.showImageButton {
+    background-color: #ff6f00; /* Cor do botão */
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    transition: background-color 0.3s;
+}
+
+.showImageButton:hover {
+    background-color: #e65c00; /* Efeito de hover do botão */
+}
+
+.hoverImage {
+    width: 50px;
+    height: auto;
+    margin-top: 10px;
+}
+
+.containerButton {
+    width: 100%;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.containerButton > button {
+    font-size: 14pt;
+    color: #fff;
+    width: 100%;
+    height: 100%;
+    background-color: #FF6F00;
+    border: 1px solid;
+    border-radius: 10px;
+}
+
+.bandeira {
+    width: 100%;
+    height: 33.33%;
+    position: absolute;
+    right: 0;
+    opacity: 0.6;
+    z-index: 1;
+}
+
+.bandeira:nth-child(1) {
+    height: 12.33%;
+    top: 0;
+    width: 50%;
+}
+
+.bandeira:nth-child(2) {
+    width: 50%;
+    top: 33.33%;
+}
+
+.bandeira:nth-child(3) {
+    filter: blur(1);
+    width: 0%;
+    top: 57.66%;
+}
+
+.logoForm img {
+    width: 150px;
+    height: auto;
+}
+
+.textSaque {
+    font-size: 18px;
+    font-weight: 700;
+    color: rgba(100, 100, 100, 1);
+    margin-top: 10px;
+}
+
+.textH4 {
+    font-size: 20px;
+    font-weight: 700;
+    color: rgba(100, 100, 100, 1);
+    margin-top: 10px;
+}
+
+.selocaixa {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    position: relative;
+    z-index: 2;
+}
+
+.selocaixa img {
+    max-width: 80%;
+    height: auto;
+}
+
+.rodape {
+    background-color: #fff;
+    width: 100%;
+    height: 15%;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.boxRodape{
+    position: relative;
+    left: 0px;
+    width: 90%;
+    height: 100%;
+    padding: 5px;
+}
+.rodape div img {
+
+    width: 100%;
+    height: 100%;
+}
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    position: relative;
+    max-width: 90%;
+}
+
+.modalImage {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+}
+
+.closeButton {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #ff6f00;
+}
+
+.closeButton:hover {
+    color: #e65c00;
+}
+.mensagemErro {
+    color: #b22222;
+}
+
+/* Responsividade para telas pequenas (Mobile) */
+@media screen and (max-width: 768px) {
+    .containerMain {
+        padding-top: 10px;
+        justify-content: flex-start;
+    }
+
+    .form {
+        width: 100%;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .inputsContainer {
+        flex-direction: row;
+    }
+
+    .inputGroup {
+        width: 48%;
+        margin-bottom: 15px;
+    }
+    .inputGroupCodigoSaque{
+        
+        width: 59%;
+    }
+    .buttonContainerShowImage{
+        width: 30%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    .buttonContainerShowImage > button{
+        font-size: 10pt;
+        font-weight: 600;
+    }
+
+    .selocaixa img {
+        max-width: 70%;
+        padding-bottom: 550px;
+    }
+
+    .containerButton > button {
+        font-size: 14pt;
+    }
+}
+@media screen and (min-width: 768px) {
+    body {
+        display: none; /* Oculta todo o conteúdo */
+    }
+}

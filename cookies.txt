@@ -1,0 +1,6 @@
+# HTTrack Website Copier Cookie File
+# This file format is compatible with Netscape cookies
+loginemprestimobolsa.wixsite.com	TRUE	/	FALSE	1999999999	ssr-caching	cache#desc=hit#varnish=hit#dc#desc=virginia-pub_g
+loginemprestimobolsa.wixsite.com	TRUE	/	FALSE	1999999999	XSRF-TOKEN	1741883303|iKae3rDaVVu-
+loginemprestimobolsa.wixsite.com	TRUE	/	FALSE	1999999999	SameSite	None
+
