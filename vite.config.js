@@ -1,7 +1,8 @@
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-  plugins: [react()],
-  base: './'  // Adiciona essa linha
+  root: 'public',  // Certifique-se de que o diretório public seja a raiz
+  build: {
+    outDir: 'dist', // A pasta onde os arquivos de build serão gerados
+  },
 });
