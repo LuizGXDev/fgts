@@ -1,8 +1,14 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  root: 'public',  // Certifique-se de que o diretório public seja a raiz
+  root: 'public',  // Defina o diretório 'public' como a raiz do Vite
   build: {
-    outDir: 'dist', // A pasta onde os arquivos de build serão gerados
+    outDir: '../dist', // Gera a pasta 'dist' fora de 'public'
+    emptyOutDir: true,  // Limpa a pasta de saída antes de gerar novos arquivos
   },
+  css: {
+    modules: {
+      localsConvention: 'camelCase', // Geração de classes com camelCase
+    }
+  }
 });
