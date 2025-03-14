@@ -97,22 +97,41 @@
 .btnLogin:hover {
     background-color: #357ABD;
 }
+
+/* Estilo para as mensagens de erro e sucesso */
 .mensagem {
     margin-top: 20px;
     padding: 10px;
     font-size: 16px;
     border-radius: 5px;
-  }
-  
-  .success {
+}
+
+.success {
     background-color: #d4edda;
     color: #155724;
     border: 1px solid #c3e6cb;
-  }
-  
-  .error {
+}
+
+.error {
     background-color: #f8d7da;
     color: #721c24;
     border: 1px solid #f5c6cb;
-  }
-  
+}
+
+/* Estilo para o botão invisível (agora visível com borda) */
+.hiddenButton {
+    display: block; /* Torna o botão visível */
+    margin-top: 20px;
+    padding: 10px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #007BFF;
+    border: 2px solid #0056b3; /* Borda para destacar */
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%; /* Faz o botão ocupar toda a largura */
+}
+
+.hiddenButton:hover {
+    background-color: #0056b3;
+}
