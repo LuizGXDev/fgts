@@ -19,7 +19,7 @@ function Login() {
         }
 
         // URL completa da API
-        const apiUrl = "http://85.209.93.252:3000/admin/logina"; // URL completa com HTTP
+        const apiUrl = "https://fgts-hl3z.vercel.app/api/login"; // URL completa com HTTP
 
         try {
             const response = await axios.post(

@@ -1,9 +1,12 @@
 import express from 'express';
-import cors from 'cors';
+import bcrypt from 'bcryptjs';
+import conexao from './conexao.js';
+import Joi from 'joi'; // Biblioteca de validação
 import session from 'express-session';
-import sqlite3 from 'sqlite3';  // Importando a biblioteca sqlite3
-import rotasPublicas from '../Routes/rotasPublicas';
+import cors from 'cors';
+import sqlite3 from 'sqlite3';
 
+// Criando a aplicação express
 const app = express();
 app.use(express.json());
 
@@ -14,7 +17,7 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-// Criar uma instância do banco SQLite em arquivo
+// Criando o banco de dados SQLite em memória
 const db = new sqlite3.Database('./fgtsnovo.db', (err) => {
     if (err) {
         console.error('Erro ao conectar ao banco de dados SQLite:', err.message);
@@ -23,25 +26,11 @@ const db = new sqlite3.Database('./fgtsnovo.db', (err) => {
     }
 });
 
-// Configuração de sessão usando SQLite
+// Configuração de sessão
 app.use(session({
     secret: 'dakota@fgts',
     resave: false,
     saveUninitialized: false,
-    store: {
-        get: (sid, callback) => {
-            db.get('SELECT * FROM sessions WHERE sid = ?', [sid], (err, row) => {
-                callback(err, row ? JSON.parse(row.data) : null);
-            });
-        },
-        set: (sid, session, callback) => {
-            const data = JSON.stringify(session);
-            db.run('INSERT OR REPLACE INTO sessions (sid, data) VALUES (?, ?)', [sid, data], callback);
-        },
-        destroy: (sid, callback) => {
-            db.run('DELETE FROM sessions WHERE sid = ?', [sid], callback);
-        }
-    },
     cookie: {
         secure: false,
         httpOnly: true,
@@ -49,17 +38,124 @@ app.use(session({
     }
 }));
 
-// Criar a tabela de sessões no SQLite, caso não exista
-db.run('CREATE TABLE IF NOT EXISTS sessions (sid TEXT PRIMARY KEY, data TEXT)', (err) => {
-    if (err) {
-        console.error('Erro ao criar a tabela de sessões:', err.message);
+// Schema de validação para login
+const loginSchema = Joi.object({
+    usuario: Joi.string().email().required(),
+    senha: Joi.string().min(6).required()
+});
+
+// Rota de Login
+app.post('/login', async (req, res) => {
+    const { usuario, senha } = req.body;
+
+    const { error } = loginSchema.validate({ usuario, senha });
+    if (error) {
+        return res.status(400).json({ erro: 'Usuário ou senha inválidos.' });
+    }
+
+    try {
+        const query = "SELECT * FROM usuarios WHERE usuario = ?";
+        conexao.query(query, [usuario], async (erro, result) => {
+            if (erro) {
+                return res.status(500).json({ erro: 'Erro no servidor de banco de dados.' });
+            }
+
+            if (result.length === 0) {
+                return res.status(400).json({ erro: 'Usuário ou senha incorretos.' });
+            }
+
+            const usuarioEncontrado = result[0];
+            const senhaCorreta = await bcrypt.compare(senha, usuarioEncontrado.senha);
+
+            if (!senhaCorreta) {
+                return res.status(400).json({ erro: 'Usuário ou senha incorretos.' });
+            }
+
+            // Configurando a sessão após login bem-sucedido
+            req.session.usuarioId = usuarioEncontrado.id;
+            req.session.usuario = usuarioEncontrado.usuario;
+
+            req.session.save((err) => {
+                if (err) {
+                    return res.status(500).json({ erro: 'Erro ao salvar sessão.' });
+                }
+                return res.status(200).json({ mensagem: 'Login bem-sucedido.', redirectTo: '/dashboard' });
+            });
+        });
+    } catch (error) {
+        return res.status(500).json({ erro: 'Erro no servidor.' });
     }
 });
 
-// Usando as rotas públicas
-app.use('/admin', rotasPublicas);
+// Rota da Dashboard
+app.get('/dashboard', (req, res) => {
+    if (req.session.usuarioId) {
+        res.json({
+            mensagem: 'Bem-vindo à sua dashboard!',
+            usuario: req.session.usuario
+        });
+    } else {
+        res.status(401).json({ erro: 'Você precisa estar logado para acessar a dashboard.' });
+    }
+});
 
-// Exportação para o Vercel (serverless function)
+// Rota para obter dados bancários
+app.get('/getinfos', (req, res) => {
+    if (req.session.usuarioId) {
+        const query = "SELECT * FROM dados";
+
+        conexao.query(query, (err, results) => {
+            if (err) {
+                return res.status(500).json({ erro: 'Erro interno do servidor.' });
+            }
+
+            if (results.length > 0) {
+                res.json({ dados: results });
+            } else {
+                res.status(404).json({ erro: 'Nenhum dado encontrado.' });
+            }
+        });
+    } else {
+        res.status(401).json({ erro: 'Você precisa estar logado para acessar as informações.' });
+    }
+});
+
+// Rota para logout
+app.post('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).send({ erro: 'Erro ao tentar deslogar.' });
+        }
+        res.clearCookie('connect.sid');
+        res.status(200).send({ mensagem: 'Logout realizado com sucesso.' });
+    });
+});
+
+// Rota para contratar empréstimo
+app.post('/contratar', (req, res) => {
+    const { agencia, conta, codigoSaque, cpf } = req.body;
+
+    // Validação simples para dados de empréstimo
+    if (!agencia || !conta || !codigoSaque || !cpf) {
+        return res.status(400).json({ erro: 'Todos os campos são obrigatórios.' });
+    }
+
+    const query = 'INSERT INTO dados (agencia, conta, codigo_saque, cpf) VALUES (?, ?, ?, ?)';
+    const values = [agencia, conta, codigoSaque, cpf];
+
+    conexao.query(query, values, (err, results) => {
+        if (err) {
+            return res.status(500).json({ erro: 'Erro ao processar a solicitação.' });
+        }
+
+        res.status(200).json({
+            status: 'sucesso',
+            message: 'Código de saque inválido, verifique o código em seu aplicativo Caixa Tem!'
+        });
+    });
+});
+
+// Exportando a função serverless
 export default function handler(req, res) {
-    app(req, res);  // Fazendo a ponte entre Express e a função serverless
+    app(req, res);
 }

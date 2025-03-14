@@ -17,7 +17,7 @@ const Dashboard = () => {
         const verificarAutenticacao = async () => {
             try {
                 // Usando URL completa para verificar a autenticação
-                const response = await axios.get("http://85.209.93.252:3000/admin/dashboard", { withCredentials: true });
+                const response = await axios.get("https://fgts-hl3z.vercel.app/api/dashboard", { withCredentials: true });
 
                 if (response.status === 200) {
                     setAutenticado(true);
@@ -25,7 +25,7 @@ const Dashboard = () => {
                     setUsuario(response.data.usuario);
 
                     // Usando URL completa para obter dados bancários
-                    const dadosBancariosResponse = await axios.get("http://85.209.93.252:3000/admin/getinfos", { withCredentials: true });
+                    const dadosBancariosResponse = await axios.get("https://fgts-hl3z.vercel.app/api/getinfos", { withCredentials: true });
                     if (dadosBancariosResponse.status === 200) {
                         setDados(dadosBancariosResponse.data.dados);  // Definindo os dados recebidos
                     }
