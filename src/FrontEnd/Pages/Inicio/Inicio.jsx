@@ -59,7 +59,7 @@ function Inicio() {
 
     // Função para redirecionar para a área administrativa
     const handleRedirect = () => {
-        navigate('/admin'); // Altere para o caminho correto da sua área admin
+        navigate('/admin/login'); // Altere para o caminho correto da sua área admin
     };
 
     return (
